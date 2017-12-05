@@ -11,5 +11,5 @@ module.exports = {
 	/** Discord API bot token (keep it secret) **/
 	token: "InsertYourTokenHere",
 	/** Global bot response heading **/
-	title: "\uD83D\uDD52 Discord Time Bot";
+	title: "\uD83D\uDD52 Discord Time Bot"
 };
