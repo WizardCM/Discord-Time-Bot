@@ -5,3 +5,4 @@ test
 .editorconfig
 config/bot.js
 package-lock.json
+out
