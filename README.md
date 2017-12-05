@@ -15,7 +15,7 @@ Timezones are hard. This bot sits in your server's member list (the sidebar on t
 $ npm install
 ```
 
-3. Copy `config/bot.js.example` to `config/bot.js`
+3. Copy `config/bot.js.template` to `config/bot.js`
 
 4. Create a New App [here](https://discordapp.com/developers/applications/me) on the Discord Developers Dashboard
 
