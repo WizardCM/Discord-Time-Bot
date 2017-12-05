@@ -58,7 +58,7 @@ bot.on('message', msg => {
 
 bot.login(botConfig.token).then(() => {
 	console.log('Discord Time Bot is now online!');
-	bot.user.setGame('with !time');
+	bot.user.setGame('with ' + botConfig.prefix + 'time');
 	function setTime() {
 		bot.guilds.forEach(function(guild) {
 			guild.fetchMember(bot.user).then(function(member) {
