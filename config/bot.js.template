@@ -1,6 +1,15 @@
+/**
+	@module config/bot
+	@desc Before editing, this file should be cloned from bot.js.template to bot.js
+**/
+
 module.exports = {
-  name: "MyTimeBot",
-  prefix:  "?",
-  token: "InsertYourTokenHere",
-  title: "\uD83D\uDD52 Discord Time Bot";
+	/** Bot username without discriminator **/
+	name: "MyTimeBot",
+	/** Global bot command prefix **/
+	prefix:  "?",
+	/** Discord API bot token (keep it secret) **/
+	token: "InsertYourTokenHere",
+	/** Global bot response heading **/
+	title: "\uD83D\uDD52 Discord Time Bot";
 };
