@@ -1,0 +1,7 @@
+node_modules
+coverage
+.node-persist
+test
+.editorconfig
+config/bot.js
+package-lock.json

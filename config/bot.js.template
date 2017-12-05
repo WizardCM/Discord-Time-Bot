@@ -1,0 +1,6 @@
+module.exports = {
+  name: "MyTimeBot",
+  prefix:  "?",
+  token: "InsertYourTokenHere",
+  title: "\uD83D\uDD52 Discord Time Bot";
+};
