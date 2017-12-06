@@ -18,8 +18,8 @@ module.exports.triggers = ['time']
 module.exports.run = function (msg) {
 	let parentModule = this;
 	let command = msg.content.replace(/( {2,})/g, ' ').split(' ');
-	// TODO EvaluatedPermissions#hasPermission is deprecated, use Permissions#has instead
-	let hasPerms = (msg.member.permissions.hasPermission('MANAGE_GUILD') || msg.member.permissions.hasPermission('ADMINISTRATOR'));
+	let hasPerms = new Discord.Permissions(msg.member.permissions.bitfield);
+	hasPerms = hasPerms.has('ADMINISTRATOR') || hasPerms.has('MANAGE_GUILD');
 	let config = storage.getItemSync(msg.guild.id);
 	let thisServer = {};
 	if (config) {
