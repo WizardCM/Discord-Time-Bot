@@ -1,21 +1,30 @@
 /** 
-	@module config/defaults
-	@desc Provide default and fallback strings
-	@author WizardCM <bots@wizardcm.com>
-
-	Available zone names https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-	Available format codes https://momentjs.com/docs/#/displaying/
-**/
+	* @module config/defaults
+	* @author WizardCM <bots@wizardcm.com>
+	* @desc Provide default and fallback strings.
+	* [Available zone names](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
+	* [Available format codes](https://momentjs.com/docs/#/displaying/).
+*/
 
 /**
-	@type Object
-**/
+	@type {Object}
+*/
 module.exports = {
-	/** Default bot timezone if server's location is unknown **/
+	/** 
+	 * @desc Default bot timezone if server's location is unknown
+	 * @default "Australia/Melbourne"
+	 */
 	zone: "Australia/Melbourne",
-	/** Default bot name format **/
+	/** 
+	 * @desc Default bot name format
+	 * @default "ddd h:mm A"
+	 */
 	format: "ddd h:mm A",
-	/** Based on server location, default timezone to speed up initial setup **/
+	/** 
+	 * @desc Based on server location, default timezone to speed up initial setup
+	 * @type {Object.<string, string>}
+	 * @default
+	 */
 	zones: {
 		'brazil': 'America/Araguaina',
 		'eu-central': 'Europe/Berlin',

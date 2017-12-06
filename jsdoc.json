@@ -1,0 +1,17 @@
+{
+    "recurseDepth": 3,
+    "source": {
+        "include": ["index.js","config/","commands/"],
+        "exclude": ["node_modules/"],
+        "includePattern": ".+\\.js(doc|x)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "opts": {
+        "destination": "./docs/",
+        "recursive": true
+    },
+    "plugins": [
+        "plugins/markdown"
+    ]
+
+}

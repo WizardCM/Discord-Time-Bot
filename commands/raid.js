@@ -17,12 +17,13 @@ module.exports.triggers = ['raid', 'join', 'leave']
 **/
 module.exports.run = function (msg) {
 	// if (msg.content.indexOf("!raid") == 0 || msg.content.indexOf("!join") == 0 || msg.content.indexOf("!leave") == 0)
-	var command = msg.content.split(' ');
-	var hasPerms = (msg.member.permissions.hasPermission('MANAGE_GUILD') || msg.member.permissions.hasPermission('ADMINISTRATOR'));
-	var rsvpTitle = "Ready Check by WizardCM";
-	var senderUserTag = msg.member.user.username + "#" + msg.member.user.discriminator + "%%%%%%" + msg.member.user.id;
-	var raidName = msg.guild.id + '_raid';
-	var raidDetails = storage.getItemSync(raidName);
+	let parentModule = this;
+	let command = msg.content.split(' ');
+	let hasPerms = (msg.member.permissions.hasPermission('MANAGE_GUILD') || msg.member.permissions.hasPermission('ADMINISTRATOR'));
+	let rsvpTitle = "Ready Check by WizardCM";
+	let senderUserTag = msg.member.user.username + "#" + msg.member.user.discriminator + "%%%%%%" + msg.member.user.id;
+	let raidName = msg.guild.id + '_raid';
+	let raidDetails = storage.getItemSync(raidName);
 	try {
 		if (!raidDetails) {
 			raidDetails = {};
@@ -31,10 +32,10 @@ module.exports.run = function (msg) {
 	} catch (error) {
 		console.log("Failed to load data for " + msg.guild.name + ": " + error);
 	}
-	var joinRaid = function() {
+	let joinRaid = function() {
 		if (Object.keys(raidDetails).length && raidDetails.raiders.indexOf(senderUserTag) === -1) { // Not raider
 			if(raidDetails.raiders.length) {
-				var raiders = raidDetails.raiders.split(",");
+				let raiders = raidDetails.raiders.split(",");
 				raiders.push(senderUserTag);
 				raidDetails.raiders = raiders.join(',');
 			} else {
@@ -48,10 +49,10 @@ module.exports.run = function (msg) {
 			msg.channel.send("There is currently no raid scheduled.");
 		}
 	};
-	var leaveRaid = function() {
+	let leaveRaid = function() {
 		if (Object.keys(raidDetails).length && raidDetails.raiders.indexOf(senderUserTag) !== -1) { // Is a raider
-			var raiders = raidDetails.raiders.split(",");
-			var index = raiders.indexOf(senderUserTag);
+			let raiders = raidDetails.raiders.split(",");
+			let index = raiders.indexOf(senderUserTag);
 			raiders.splice(index, 1);
 			raidDetails.raiders = raiders.join(",");
 			storage.setItemSync(raidName, raidDetails);
@@ -64,7 +65,7 @@ module.exports.run = function (msg) {
 		}
 	};
 	if (Object.keys(raidDetails).length) {
-		var raiderCount = 0;
+		let raiderCount = 0;
 		if (raidDetails.raiders.indexOf(",") === -1 && raidDetails.raiders.length) {
 			raiderCount = 1;
 		} else if (raidDetails.raiders.indexOf(",") !== -1) {
@@ -74,9 +75,9 @@ module.exports.run = function (msg) {
 	if (command.length == 1) {
 		switch(command[0]) {
 			case botConfig.prefix + 'raid':
-				var raidSummary = "None scheduled.";
+				let raidSummary = "None scheduled.";
 				if (Object.keys(raidDetails).length) {
-					var raiderCount = 0;
+					let raiderCount = 0;
 					if (raidDetails.raiders.indexOf(",") === -1 && raidDetails.raiders.length) {
 						raiderCount = 1;
 					} else if (raidDetails.raiders.indexOf(",") !== -1) {
@@ -89,7 +90,7 @@ module.exports.run = function (msg) {
 								  (hasPerms && raidDetails.modifiedBy.trim().length ? "\n_Last modified by " + raidDetails.modifiedBy.split("#")[0] + "_" : "");
 				}
 				msg.channel.sendEmbed({
-					color: colorNeutral,
+					color: colorConfig.neutral,
 					title: rsvpTitle,
 					url: '',
 					description: 'Ready check!',
@@ -136,7 +137,7 @@ module.exports.run = function (msg) {
 				case 'create':
 				case 'set':
 					if (!Object.keys(raidDetails).length) {
-						var desc = command.join(' ').replace('!raid ' + command[1], '').trim();
+						let desc = command.join(' ').replace('!raid ' + command[1], '').trim();
 						if (desc.length) {
 							raidDetails = {
 								createdDate: new Date(),
@@ -162,12 +163,12 @@ module.exports.run = function (msg) {
 				case 'reschedule':
 					if (Object.keys(raidDetails).length && command.length > 2) {
 						// Renaming
-						var desc = command.join(' ').replace('!raid ' + command[1], '').trim();
+						let desc = command.join(' ').replace('!raid ' + command[1], '').trim();
 						if(desc.length) {
 							raidDetails.description = desc;
 							raidDetails.modifiedBy = senderUserTag;
 							storage.setItemSync(raidName, raidDetails);
-							var raiderNote = (raiderCount > 0 ? "Might be a good idea to `!raid notify` existing raiders of the change. " : "");
+							let raiderNote = (raiderCount > 0 ? "Might be a good idea to `!raid notify` existing raiders of the change. " : "");
 							msg.channel.send("Raid description updated! " + raiderNote + "**Raiders**, add yourselves using `!join`");
 						}
 					} else if (Object.keys(raidDetails).length) {
@@ -181,8 +182,8 @@ module.exports.run = function (msg) {
 					break;
 				case 'list':
 					if (Object.keys(raidDetails).length && raidDetails.raiders.length) {
-						var raiders = raidDetails.raiders.split(',');
-						var raiderList = "";
+						let raiders = raidDetails.raiders.split(',');
+						let raiderList = "";
 						raiders.forEach(function(raider) {
 							raiderList += raider.split("%%%%%%")[0] + ", ";
 						});
@@ -198,9 +199,9 @@ module.exports.run = function (msg) {
 				case 'start':
 				case 'ping':
 					if (Object.keys(raidDetails).length && raidDetails.raiders.length) {
-						var raiders = raidDetails.raiders.split(',');
-						var raiderCount = 0;
-						var mentions = "";
+						let raiders = raidDetails.raiders.split(',');
+						let raiderCount = 0;
+						let mentions = "";
 						msg.channel.members.some(function(data) {
 							if (raidDetails.raiders.indexOf(data.user.id) !== -1) {
 								mentions += data.user + ' ';
@@ -224,9 +225,9 @@ module.exports.run = function (msg) {
 				case 'remove':
 					// TODO Remove event and all joined users
 					if (command.length == 3 && command[2] == "yes" && raidDetails.raiders.length) {
-						var raiders = raidDetails.raiders.split(',');
-						var raiderCount = 0;
-						var mentions = "";
+						let raiders = raidDetails.raiders.split(',');
+						let raiderCount = 0;
+						let mentions = "";
 						msg.channel.members.some(function(data) {
 							if (raidDetails.raiders.indexOf(data.user.id) !== -1) {
 								mentions += data.user + ' ';

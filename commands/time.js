@@ -18,6 +18,7 @@ module.exports.triggers = ['time']
 module.exports.run = function (msg) {
 	let parentModule = this;
 	let command = msg.content.replace(/( {2,})/g, ' ').split(' ');
+	// TODO EvaluatedPermissions#hasPermission is deprecated, use Permissions#has instead
 	let hasPerms = (msg.member.permissions.hasPermission('MANAGE_GUILD') || msg.member.permissions.hasPermission('ADMINISTRATOR'));
 	let config = storage.getItemSync(msg.guild.id);
 	let thisServer = {};
@@ -30,12 +31,12 @@ module.exports.run = function (msg) {
 			let response = {
 				name: 'Status'
 			};
-			let color = colorConfig.colorNeutral;
+			let color = colorConfig.neutral;
 			if (Object.keys(thisServer).length) {
-				color = colorConfig.colorGood;
+				color = colorConfig.good;
 				response.value = ":white_check_mark: All set for **" + msg.guild.name + "**. \n\nFeel free to run `!time help` for configuration & more information.";
 			} else {
-				color = colorConfig.colorBad;
+				color = colorConfig.bad;
 				response.value = ":exclamation: Not yet configured. \n\nPlease run `!time start` to get set up. It's a super quick process.";
 			}
 			msg.channel.sendEmbed({
@@ -54,7 +55,7 @@ module.exports.run = function (msg) {
 				if(hasPerms) {
 					if(!Object.keys(thisServer).length) {
 						msg.channel.sendEmbed({
-							color: colorConfig.colorGood,
+							color: colorConfig.good,
 							title: botConfig.title,
 							description: 'Initial setup for **' + msg.guild.name + '**',
 							url: '',
@@ -92,7 +93,7 @@ module.exports.run = function (msg) {
 							thisServer.zone = newZone;
 							storage.setItemSync(msg.guild.id, JSON.stringify(thisServer));
 							msg.channel.sendEmbed({
-								color: colorConfig.colorGood,
+								color: colorConfig.good,
 								title: botConfig.title,
 								description: ' ',
 								url: '',
@@ -103,7 +104,7 @@ module.exports.run = function (msg) {
 							});
 						} else {
 							msg.channel.sendEmbed({
-								color: colorConfig.colorBad,
+								color: colorConfig.bad,
 								title: botConfig.title,
 								description: ' ',
 								url: '',
@@ -115,7 +116,7 @@ module.exports.run = function (msg) {
 						}
 					} else {
 						msg.channel.sendEmbed({
-							color: colorConfig.colorGood,
+							color: colorConfig.good,
 							title: botConfig.title,
 							description: ' ',
 							url: '',
@@ -161,7 +162,7 @@ module.exports.run = function (msg) {
 					botServer.value = "No configuration found! Please run `!time start` first.";
 				}
 				msg.channel.sendEmbed({
-					color: colorConfig.colorNeutral,
+					color: colorConfig.neutral,
 					title: botConfig.title,
 					url: '',
 					description: '`!time server` Details about the bot\'s configuration on this server.',
@@ -178,7 +179,7 @@ module.exports.run = function (msg) {
 				break;
 			case 'help':
 				msg.channel.sendEmbed({
-					color: colorConfig.colorNeutral,
+					color: colorConfig.neutral,
 					title: botConfig.title,
 					url: '',
 					description: 'Below you will find all the details on how to get this bot up and running on your server.',
@@ -205,7 +206,7 @@ module.exports.run = function (msg) {
 				break;
 			case 'bot':
 				msg.channel.sendEmbed({
-					color: colorConfig.colorNeutral,
+					color: colorConfig.neutral,
 					title: botConfig.title,
 					description: 'Global bot information',
 					url: '',
@@ -218,7 +219,7 @@ module.exports.run = function (msg) {
 				break;
 			case 'defaults':
 				msg.channel.sendEmbed({
-					color: colorConfig.colorNeutral,
+					color: colorConfig.neutral,
 					title: botConfig.title,
 					url: '',
 					description: '`!time defaults` Original defaults for this bot.',
@@ -233,7 +234,7 @@ module.exports.run = function (msg) {
 				break;
 			case 'in':
 				msg.channel.sendEmbed({
-					color: colorConfig.colorNeutral,
+					color: colorConfig.neutral,
 					title: botConfig.title,
 					description: '`!time in [zone]` Check a timezone!',
 					url: '',

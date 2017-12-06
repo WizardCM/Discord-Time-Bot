@@ -1,8 +1,8 @@
 'use strict';
 /**
 	@module timebot
-	@desc This is the core file of the bot
 	@author WizardCM <bots@wizardcm.com>
+	@desc This is the core file of the bot. Run it using `npm run bot`
 **/
 
 /* System */
@@ -26,12 +26,22 @@ global.defaultConfig  = require('./config/defaults.js');
 global.timeCommand    = require('./commands/time.js');
 // TODO loop through the commands dir and automatically add them
 
-var me = {};
-
 storage.initSync();
 
-bot.on('message', msg => {
-	var errorResponse = function(type, title, message) {
+/**
+ * @desc Primary event handler for incoming messages
+ * @listens bot:message
+ * @param msg {Object} Message object from Discord.js
+ * @function
+ */
+function handleMessage(msg) {
+	/**
+	 * @desc Error response handler function, builds and displays a rich embed
+	 * @param type {string} Type of error
+	 * @param title {string} Custom title string
+	 * @param message {message} Custom message string
+	 */
+	let errorResponse = function(type, title, message) {
 		switch(type) {
 			case 'set':
 				title = 'Sorry, it looks like you don\'t have permission to set the time for this server. Please contact a moderator or the owner.';
@@ -45,7 +55,7 @@ bot.on('message', msg => {
 		}
 		
 		msg.channel.sendEmbed({
-			color: colorConfig.colorBad,
+			color: colorConfig.bad,
 			title: botConfig.title,
 			description: ' ',
 			url: '',
@@ -59,17 +69,27 @@ bot.on('message', msg => {
 		// TODO Expanding on proper command import, also overhaul this
 		timeCommand.run(msg);
 	}
-});
+}
+bot.on('message', handleMessage);
 
-bot.login(botConfig.token).then(() => {
+/**
+ * @desc Initial launch function
+ * @listens bot:login
+ * @function
+ */
+function handleLogin() {
 	console.log('Discord Time Bot is now online!');
 	bot.user.setGame('with ' + botConfig.prefix + 'time');
+	/**
+	 * @desc Time function that updates the bot's nickname in every server
+	 * @function
+	 */
 	function setTime() {
 		bot.guilds.forEach(function(guild) {
 			guild.fetchMember(bot.user).then(function(member) {
 				if(member.id == bot.user.id) {
-						var data = storage.getItemSync(guild.id);
-						var thisServer = {};
+						let data = storage.getItemSync(guild.id);
+						let thisServer = {};
 						try {
 							if (data) {
 								thisServer = JSON.parse(data);
@@ -90,5 +110,5 @@ bot.login(botConfig.token).then(() => {
 	}
 	setTime();
 	schedule.scheduleJob('0 * * * * *', setTime);
-});
-
+}
+bot.login(botConfig.token).then(handleLogin);
