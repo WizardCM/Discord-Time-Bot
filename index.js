@@ -54,7 +54,7 @@ function handleMessage(msg) {
 				break;
 		}
 		
-		msg.channel.sendEmbed({
+		msg.channel.send(new Discord.RichEmbed({
 			color: colorConfig.bad,
 			title: botConfig.title,
 			description: ' ',
@@ -63,7 +63,7 @@ function handleMessage(msg) {
 				name: title,
 				value: message
 			}]
-		});
+		}));
 	};
 	if (msg.content.indexOf(botConfig.prefix + timeCommand.triggers[0]) == 0) {
 		// TODO Expanding on proper command import, also overhaul this

@@ -18,7 +18,7 @@ module.exports.triggers = ['schedule'];
 module.exports.run = function (msg) {
 	var command = msg.content.split(' ');
 	if(command.length == 1) {
-		msg.channel.sendEmbed({
+		msg.channel.send(new Discord.RichEmbed({
 			color: colorConfig.colorNeutral,
 			title: botConfig.title,
 			description: ' ',
@@ -35,11 +35,11 @@ module.exports.run = function (msg) {
 					"```\n" +
 					"Max title length: 27 characters"
 			}]
-		});
+		}));
 	} else {
 		switch (command[1]) {
 			case 'info':
-				msg.channel.sendEmbed({
+				msg.channel.send(new Discord.RichEmbed({
 					color: colorConfig.colorNeutral,
 					title: botConfig.title,
 					description: ' ',
@@ -53,10 +53,10 @@ module.exports.run = function (msg) {
 						value: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nisl leo, tincidunt congue velit in, vestibulum molestie dui. Mauris aliquam convallis urna in sagittis. Aliquam erat volutpat. Proin odio elit, feugiat eget eros in, dapibus iaculis diam. Praesent feugiat convallis dolor ac finibus. Nullam porta luctus dignissim. Pellentesque vel nisi non nulla commodo tempus et quis mauris. Nullam felis purus, semper ut tellus et, ornare hendrerit diam."
 					},
 					]
-				});
+				}));
 				break;
 			case 'add':
-				msg.channel.sendEmbed({
+				msg.channel.send(new Discord.RichEmbed({
 					color: colorConfig.colorNeutral,
 					title: botConfig.title,
 					description: '`!schedule add` Learn how to add a new event. Each separate argument is put on a new line (Shift+Enter on your keyboard), and anything after is considered part of the description (allows new lines). You can also tag users in the description if you\'d like them notified when the event is about to start. **Everything** goes in one message.',
@@ -81,7 +81,7 @@ module.exports.run = function (msg) {
 							"```\n"
 					},
 					]
-				});
+				}));
 				break;
 		}
 	}

@@ -90,7 +90,7 @@ module.exports.run = function (msg) {
 								  "_" + "Organized by " + raidDetails.createdBy.split("#")[0] + "_" + 
 								  (hasPerms && raidDetails.modifiedBy.trim().length ? "\n_Last modified by " + raidDetails.modifiedBy.split("#")[0] + "_" : "");
 				}
-				msg.channel.sendEmbed({
+				msg.channel.send(new Discord.RichEmbed({
 					color: colorConfig.neutral,
 					title: rsvpTitle,
 					url: '',
@@ -112,7 +112,7 @@ module.exports.run = function (msg) {
 						value: raidSummary // TODO, display description, who created it (and when?) and how many people have joined (and if the current user has joined)
 					}
 					]
-				});
+				}));
 				break;
 			case botConfig.prefix + 'join':
 				joinRaid();
