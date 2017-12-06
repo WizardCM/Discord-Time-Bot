@@ -1,4 +1,9 @@
 'use strict';
+/**
+	@module timebot
+	@desc This is the core file of the bot
+	@author WizardCM <bots@wizardcm.com>
+**/
 
 /* System */
 global.Discord        = require('discord.js');

@@ -1,13 +1,20 @@
 /**
-	SCHEDULE
-	- By WizardCM
-	
-	A rough idea for a possible future command, as an extension of the RAID command.
-	Not actually functional.
+	@module commands/schedule
+	@desc A rough idea for a possible future command, as an extension of the RAID command. Not actually functional
+	@author WizardCM <bots@wizardcm.com>
 **/
 
+/**
+	@type Array
+	@desc Primary command triggers
+**/
 module.exports.triggers = ['schedule'];
 
+/**
+	@desc The function that's triggered by the onMessage event
+	@type function
+	@param msg {Object} Message object from Discord.js
+**/
 module.exports.run = function (msg) {
 	var command = msg.content.split(' ');
 	if(command.length == 1) {

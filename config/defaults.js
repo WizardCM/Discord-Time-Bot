@@ -1,11 +1,15 @@
 /** 
 	@module config/defaults
 	@desc Provide default and fallback strings
+	@author WizardCM <bots@wizardcm.com>
 
 	Available zone names https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 	Available format codes https://momentjs.com/docs/#/displaying/
 **/
 
+/**
+	@type Object
+**/
 module.exports = {
 	/** Default bot timezone if server's location is unknown **/
 	zone: "Australia/Melbourne",

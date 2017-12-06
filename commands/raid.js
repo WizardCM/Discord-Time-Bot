@@ -1,12 +1,20 @@
 /**
-	RAID READY CHECK
-	- By WizardCM
-	
-	A secondary command available for those who want it. A simple raid scheduler/manager.
+	@module commands/raid
+	@desc A simple raid scheduler/manager, originally developed for a friend. A secondary command available for those who want it.
+	@author WizardCM <bots@wizardcm.com>
 **/
 
+/**
+	@type Array
+	@desc Primary command triggers
+**/
 module.exports.triggers = ['raid', 'join', 'leave']
 
+/**
+	@desc The function that's triggered by the onMessage event
+	@type function
+	@param msg {Object} Message object from Discord.js
+**/
 module.exports.run = function (msg) {
 	// if (msg.content.indexOf("!raid") == 0 || msg.content.indexOf("!join") == 0 || msg.content.indexOf("!leave") == 0)
 	var command = msg.content.split(' ');

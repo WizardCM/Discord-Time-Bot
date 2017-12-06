@@ -1,9 +1,12 @@
 /** 
 	@module config/colors
-	@desc Standardised colours for bot responses.
-	Decimal format only.
+	@desc Standardised colours for bot responses. Decimal format only.
+	@author WizardCM <bots@wizardcm.com>
 **/
 
+/**
+	@type Object
+**/
 module.exports = {
 	/** Command completed successfully **/
 	good: 1365332,

@@ -1,8 +1,12 @@
 /**
 	@module config/bot
 	@desc Before editing, this file should be cloned from bot.js.template to bot.js
+	@author WizardCM <bots@wizardcm.com>
 **/
 
+/**
+	@type Object
+**/
 module.exports = {
 	/** Bot username without discriminator **/
 	name: "MyTimeBot",
