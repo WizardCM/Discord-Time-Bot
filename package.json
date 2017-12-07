@@ -21,7 +21,7 @@
   "repository": "/discord-time-bot",
   "private": true,
   "dependencies": {
-    "discord.js": "^11.0.0",
+    "discord.js": "git+https://git@github.com/hydrabolt/discord.js.git",
     "moment-timezone": "^0.5.11",
     "node-persist": "^2.0.10",
     "node-schedule": "^1.2.1"

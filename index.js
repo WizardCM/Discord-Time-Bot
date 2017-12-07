@@ -79,14 +79,45 @@ bot.on('message', handleMessage);
  */
 function handleLogin() {
 	console.log('Discord Time Bot is now online!');
-	bot.user.setGame('with ' + botConfig.prefix + 'time');
+	if (Discord.Activity) {
+		console.log("Rich presence capabilities found.");
+		bot.user.setPresence({
+			activity: {
+				applicationID: "274543576166301696",
+				application: "274543576166301696",
+				name: "the " + botConfig.prefix + "time",
+				type: "WATCHING",
+				url: null,
+				details: "Test 2",
+				state: "Test 3",
+				timestamps: {
+					start: 1512519960,
+					end: 1512520020
+				},
+				assets: {
+					largeText: "Test 4",
+					smallImage: "387913874013290497",
+					largeImage: "387923476217987072",
+					smallText: "Test 5"
+				},
+				party: {
+					size: [1, 2]
+				}
+			}
+		}).then(function (a, b) {
+			console.log("Rich presence applied", bot.user.presence.activity);
+		});
+	} else {
+		console.warn("Can't set fancy presence in this version.");
+	}
 	/**
 	 * @desc Time function that updates the bot's nickname in every server
 	 * @function
 	 */
-	function setTime() {
-		bot.guilds.forEach(function(guild) {
-			guild.fetchMember(bot.user).then(function(member) {
+	/*function setTime() {
+		bot.guilds.forEach(function (guild) {
+			let fetch = guild.fetchMember ? guild.fetchMember(bot.user) : guild.member(bot.user)
+			fetch.then(function(member) {
 				if(member.id == bot.user.id) {
 						let data = storage.getItemSync(guild.id);
 						let thisServer = {};
@@ -109,6 +140,14 @@ function handleLogin() {
 		});
 	}
 	setTime();
-	schedule.scheduleJob('0 * * * * *', setTime);
+	schedule.scheduleJob('0 * * * * *', setTime);*/
 }
 bot.login(botConfig.token).then(handleLogin);
+
+function handleConnectionTroubles(problem) {
+	console.warn("We just had a hiccup. Specifically:", bot.status, problem);
+}
+bot.on('disconnect', handleConnectionTroubles);
+bot.on('reconnecting', handleConnectionTroubles);
+bot.on('warn', handleConnectionTroubles);
+bot.on('error', handleConnectionTroubles);
