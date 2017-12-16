@@ -4,8 +4,6 @@ Timezones are hard. This bot sits in your server's member list (the sidebar on t
 
 ![Example Picture](https://i.imgur.com/oSi8lhK.png)
 
- > Version 1 has some known issues - primarily, if the network connection drops. It will usually continue running but will appear as 'offline' in the user list (even though the name continues updating). This will be fixed ASAP.
-
 ## Installation
 
 1. Clone this repository
