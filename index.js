@@ -24,6 +24,7 @@ global.defaultConfig  = require('./config/defaults.js');
 
 /* Commands */
 global.timeCommand    = require('./commands/time.js');
+global.raidCommand    = require('./commands/raid.js');
 // TODO loop through the commands dir and automatically add them
 
 storage.initSync();
@@ -68,6 +69,8 @@ function handleMessage(msg) {
 	if (msg.content.indexOf(botConfig.prefix + timeCommand.triggers[0]) == 0) {
 		// TODO Expanding on proper command import, also overhaul this
 		timeCommand.run(msg);
+	} else if (msg.content.indexOf(botConfig.prefix + "raid") == 0 || msg.content.indexOf(botConfig.prefix + "join") == 0 || msg.content.indexOf(botConfig.prefix + "leave") == 0) {
+		raidCommand.run(msg);
 	}
 }
 bot.on('message', handleMessage);

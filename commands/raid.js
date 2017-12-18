@@ -24,6 +24,7 @@ module.exports.run = function (msg) {
 	let senderUserTag = msg.member.user.username + "#" + msg.member.user.discriminator + "%%%%%%" + msg.member.user.id;
 	let raidName = msg.guild.id + '_raid';
 	let raidDetails = storage.getItemSync(raidName);
+	let raiderCount = 0;
 	try {
 		if (!raidDetails) {
 			raidDetails = {};
@@ -65,7 +66,7 @@ module.exports.run = function (msg) {
 		}
 	};
 	if (Object.keys(raidDetails).length) {
-		let raiderCount = 0;
+		raiderCount = 0;
 		if (raidDetails.raiders.indexOf(",") === -1 && raidDetails.raiders.length) {
 			raiderCount = 1;
 		} else if (raidDetails.raiders.indexOf(",") !== -1) {
@@ -77,7 +78,7 @@ module.exports.run = function (msg) {
 			case botConfig.prefix + 'raid':
 				let raidSummary = "None scheduled.";
 				if (Object.keys(raidDetails).length) {
-					let raiderCount = 0;
+					raiderCount = 0;
 					if (raidDetails.raiders.indexOf(",") === -1 && raidDetails.raiders.length) {
 						raiderCount = 1;
 					} else if (raidDetails.raiders.indexOf(",") !== -1) {
@@ -200,7 +201,7 @@ module.exports.run = function (msg) {
 				case 'ping':
 					if (Object.keys(raidDetails).length && raidDetails.raiders.length) {
 						let raiders = raidDetails.raiders.split(',');
-						let raiderCount = 0;
+						raiderCount = 0;
 						let mentions = "";
 						msg.channel.members.some(function(data) {
 							if (raidDetails.raiders.indexOf(data.user.id) !== -1) {
@@ -226,7 +227,7 @@ module.exports.run = function (msg) {
 					// TODO Remove event and all joined users
 					if (command.length == 3 && command[2] == "yes" && raidDetails.raiders.length) {
 						let raiders = raidDetails.raiders.split(',');
-						let raiderCount = 0;
+						raiderCount = 0;
 						let mentions = "";
 						msg.channel.members.some(function(data) {
 							if (raidDetails.raiders.indexOf(data.user.id) !== -1) {
