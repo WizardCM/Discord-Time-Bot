@@ -18,8 +18,8 @@ module.exports.triggers = ['time']
 module.exports.run = function (msg) {
 	let parentModule = this;
 	let command = msg.content.replace(/( {2,})/g, ' ').split(' ');
-	// TODO EvaluatedPermissions#hasPermission is deprecated, use Permissions#has instead
-	let hasPerms = (msg.member.permissions.hasPermission('MANAGE_GUILD') || msg.member.permissions.hasPermission('ADMINISTRATOR'));
+	let hasPerms = new Discord.Permissions(msg.member.permissions.bitfield);
+	hasPerms = hasPerms.has('ADMINISTRATOR') || hasPerms.has('MANAGE_GUILD');
 	let config = storage.getItemSync(msg.guild.id);
 	let thisServer = {};
 	if (config) {
@@ -39,13 +39,13 @@ module.exports.run = function (msg) {
 				color = colorConfig.bad;
 				response.value = ":exclamation: Not yet configured. \n\nPlease run `!time start` to get set up. It's a super quick process.";
 			}
-			msg.channel.sendEmbed({
+			msg.channel.send(new Discord.RichEmbed({
 				color: color,
 				title: botConfig.title,
 				description: ' ',
 				url: '',
 				fields: [response]
-			});
+			}));
 		} else {
 			errorResponse('');
 		}
@@ -54,7 +54,7 @@ module.exports.run = function (msg) {
 			case 'start':
 				if(hasPerms) {
 					if(!Object.keys(thisServer).length) {
-						msg.channel.sendEmbed({
+						msg.channel.send(new Discord.RichEmbed({
 							color: colorConfig.good,
 							title: botConfig.title,
 							description: 'Initial setup for **' + msg.guild.name + '**',
@@ -64,7 +64,7 @@ module.exports.run = function (msg) {
 								value: "It looks like this server is in **" + msg.guild.region + "**, so to speed up the process we're setting your default timezone to **" + defaultConfig.zones[msg.guild.region] + "**. \n\n" +
 										"If this is incorrect, or you would like to customize the timezone further, `!time zone` will provide you with more information. You can also use `!time format` to change how the time/date is displayed. \n\n:thumbsup: That's it! You're good to go."
 							}]
-						});
+						}));
 						let thisServer = {};
 						console.log("Setting defaults for " + msg.guild.name);
 						if(defaultConfig.zones[msg.guild.region]) {
@@ -92,7 +92,7 @@ module.exports.run = function (msg) {
 						if(moment.tz.zone(newZone)) {
 							thisServer.zone = newZone;
 							storage.setItemSync(msg.guild.id, JSON.stringify(thisServer));
-							msg.channel.sendEmbed({
+							msg.channel.send(new Discord.RichEmbed({
 								color: colorConfig.good,
 								title: botConfig.title,
 								description: ' ',
@@ -101,9 +101,9 @@ module.exports.run = function (msg) {
 									name: 'Timezone successfully updated',
 									value: "Set to " + thisServer.zone
 								}]
-							});
+							}));
 						} else {
-							msg.channel.sendEmbed({
+							msg.channel.send(new Discord.RichEmbed({
 								color: colorConfig.bad,
 								title: botConfig.title,
 								description: ' ',
@@ -112,10 +112,10 @@ module.exports.run = function (msg) {
 									name: 'Sorry, that\'s not a valid timezone. \nRun `!time zone` for full details.',
 									value: "For now, we're sticking with " + thisServer.zone
 								}]
-							});
+							}));
 						}
 					} else {
-						msg.channel.sendEmbed({
+						msg.channel.send(new Discord.RichEmbed({
 							color: colorConfig.good,
 							title: botConfig.title,
 							description: ' ',
@@ -124,7 +124,7 @@ module.exports.run = function (msg) {
 								name: "Current timezone: " + thisServer.zone,
 								value: "It's currently " + moment().tz(thisServer.zone).format(thisServer.format)
 							}]
-						});
+						}));
 					}
 				} else {
 					errorResponse('set');
@@ -161,7 +161,7 @@ module.exports.run = function (msg) {
 				} else {
 					botServer.value = "No configuration found! Please run `!time start` first.";
 				}
-				msg.channel.sendEmbed({
+				msg.channel.send(new Discord.RichEmbed({
 					color: colorConfig.neutral,
 					title: botConfig.title,
 					url: '',
@@ -175,10 +175,10 @@ module.exports.run = function (msg) {
 								'**Region**: ' + msg.guild.region
 						}
 					]
-				});
+				}));
 				break;
 			case 'help':
-				msg.channel.sendEmbed({
+				msg.channel.send(new Discord.RichEmbed({
 					color: colorConfig.neutral,
 					title: botConfig.title,
 					url: '',
@@ -202,10 +202,10 @@ module.exports.run = function (msg) {
 						value: 'Nice! You can\'t just yet - the code is being perfected. But soon.'
 					}
 					]
-				});
+				}));
 				break;
 			case 'bot':
-				msg.channel.sendEmbed({
+				msg.channel.send(new Discord.RichEmbed({
 					color: colorConfig.neutral,
 					title: botConfig.title,
 					description: 'Global bot information',
@@ -215,10 +215,10 @@ module.exports.run = function (msg) {
 						value: "**Uptime**: " + bot.uptime + "ms" + "\n" +
 							"**Servers**: " + storage.keys().length + " configured, " + bot.guilds.array().length + " total"
 					}]
-				});
+				}));
 				break;
 			case 'defaults':
-				msg.channel.sendEmbed({
+				msg.channel.send(new Discord.RichEmbed({
 					color: colorConfig.neutral,
 					title: botConfig.title,
 					url: '',
@@ -230,10 +230,10 @@ module.exports.run = function (msg) {
 							'**Regions**: `' + JSON.stringify(defaultConfig.zones, null, 2) + '`' + '\n'
 					}
 					]
-				});
+				}));
 				break;
 			case 'in':
-				msg.channel.sendEmbed({
+				msg.channel.send(new Discord.RichEmbed({
 					color: colorConfig.neutral,
 					title: botConfig.title,
 					description: '`!time in [zone]` Check a timezone!',
@@ -242,7 +242,7 @@ module.exports.run = function (msg) {
 						name: 'You requested ' + command[2],
 						value: "It is currently " + moment().tz(command[2]).format('h:mm A [on] dddd')
 					}]
-				});
+				}));
 				break;
 		}
 	}

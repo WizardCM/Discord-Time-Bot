@@ -19,7 +19,8 @@ module.exports.run = function (msg) {
 	// if (msg.content.indexOf("!raid") == 0 || msg.content.indexOf("!join") == 0 || msg.content.indexOf("!leave") == 0)
 	let parentModule = this;
 	let command = msg.content.split(' ');
-	let hasPerms = (msg.member.permissions.hasPermission('MANAGE_GUILD') || msg.member.permissions.hasPermission('ADMINISTRATOR'));
+	let hasPerms = new Discord.Permissions(msg.member.permissions.bitfield);
+	hasPerms = hasPerms.has('ADMINISTRATOR') || hasPerms.has('MANAGE_GUILD');
 	let rsvpTitle = "Ready Check by WizardCM";
 	let senderUserTag = msg.member.user.username + "#" + msg.member.user.discriminator + "%%%%%%" + msg.member.user.id;
 	let raidName = msg.guild.id + '_raid';
@@ -90,7 +91,7 @@ module.exports.run = function (msg) {
 								  "_" + "Organized by " + raidDetails.createdBy.split("#")[0] + "_" + 
 								  (hasPerms && raidDetails.modifiedBy.trim().length ? "\n_Last modified by " + raidDetails.modifiedBy.split("#")[0] + "_" : "");
 				}
-				msg.channel.sendEmbed({
+				msg.channel.send(new Discord.RichEmbed({
 					color: colorConfig.neutral,
 					title: rsvpTitle,
 					url: '',
@@ -112,7 +113,7 @@ module.exports.run = function (msg) {
 						value: raidSummary // TODO, display description, who created it (and when?) and how many people have joined (and if the current user has joined)
 					}
 					]
-				});
+				}));
 				break;
 			case botConfig.prefix + 'join':
 				joinRaid();

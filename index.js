@@ -28,6 +28,7 @@ global.raidCommand    = require('./commands/raid.js');
 // TODO loop through the commands dir and automatically add them
 
 storage.initSync();
+let scheduledJob = {};
 
 /**
  * @desc Primary event handler for incoming messages
@@ -42,20 +43,20 @@ function handleMessage(msg) {
 	 * @param title {string} Custom title string
 	 * @param message {message} Custom message string
 	 */
-	let errorResponse = function(type, title, message) {
-		switch(type) {
+	let errorResponse = function (type, title, message) {
+		switch (type) {
 			case 'set':
 				title = 'Sorry, it looks like you don\'t have permission to set the time for this server. Please contact a moderator or the owner.';
 				message = "Have them run `!time` for more details.";
 			default:
-				if(!title && !message) {
+				if (!title && !message) {
 					title = "Something went wrong. Try again in a little while.";
 					message = "If it doesn't improve, contact the bot author.";
 				}
 				break;
 		}
-		
-		msg.channel.sendEmbed({
+
+		msg.channel.send(new Discord.RichEmbed({
 			color: colorConfig.bad,
 			title: botConfig.title,
 			description: ' ',
@@ -64,7 +65,7 @@ function handleMessage(msg) {
 				name: title,
 				value: message
 			}]
-		});
+		}));
 	};
 	if (msg.content.indexOf(botConfig.prefix + timeCommand.triggers[0]) == 0) {
 		// TODO Expanding on proper command import, also overhaul this
@@ -88,30 +89,51 @@ function handleLogin() {
 	 * @function
 	 */
 	function setTime() {
-		bot.guilds.forEach(function(guild) {
-			guild.fetchMember(bot.user).then(function(member) {
-				if(member.id == bot.user.id) {
-						let data = storage.getItemSync(guild.id);
-						let thisServer = {};
-						try {
-							if (data) {
-								thisServer = JSON.parse(data);
-							}
-						} catch (error) {
-							console.log("Failed to load data for " + guild.name + ": " + error);
+		bot.guilds.forEach(function (guild) {
+			guild.fetchMember(bot.user).then(function (member) {
+				if (member.id == bot.user.id) {
+					let data = storage.getItemSync(guild.id);
+					let thisServer = {};
+					try {
+						if (data) {
+							thisServer = JSON.parse(data);
 						}
-						
-						if (!Object.keys(thisServer).length) {
-							member.setNickname("Not Configured");
-						} else {
-							// console.log(guild.name + " has: " + JSON.stringify(thisServer));
-							member.setNickname(moment().tz(thisServer.zone).format(thisServer.format));
-						}
+					} catch (error) {
+						console.log("Failed to load data for " + guild.name + ": " + error);
+					}
+
+					if (!Object.keys(thisServer).length) {
+						member.setNickname("Not Configured");
+					} else {
+						// console.log(guild.name + " has: " + JSON.stringify(thisServer));
+						member.setNickname(moment().tz(thisServer.zone).format(thisServer.format));
+					}
 				}
+			}).catch(function (error) {
+				console.warn("Failed fetching members.");
 			});
 		});
 	}
 	setTime();
-	schedule.scheduleJob('0 * * * * *', setTime);
+	scheduledJob = schedule.scheduleJob('0 * * * * *', setTime);
 }
-bot.login(botConfig.token).then(handleLogin);
+function handleDisconnect() {
+	if (scheduledJob) {
+		scheduledJob.cancel();
+	}
+}
+
+/**
+ * @desc Attempt to log into Discord's servers. Handle as many errors as we can instead of crashing.
+ * @function
+ */
+bot.login(botConfig.token);
+bot.on('ready', handleLogin);
+bot.on('resume', handleLogin);
+bot.on('reconnecting', handleDisconnect);
+bot.on('error', handleDisconnect);
+bot.on('disconnect', function (event) {
+	console.warn("Disconnected as Discord's servers are unreachable.");
+	handleDisconnect();
+});
+// TODO (node:23452) UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id: 11): Error: getaddrinfo ENOENT discordapp.com:443
