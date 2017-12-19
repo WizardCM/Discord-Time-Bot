@@ -71,7 +71,7 @@ function handleMessage(msg) {
 		// TODO Expanding on proper command import, also overhaul this
 		timeCommand.run(msg);
 	} else if (msg.content.indexOf(botConfig.prefix + "raid") == 0 || msg.content.indexOf(botConfig.prefix + "join") == 0 || msg.content.indexOf(botConfig.prefix + "leave") == 0) {
-		raidCommand.run(msg);
+		//raidCommand.run(msg);
 	}
 }
 bot.on('message', handleMessage);
@@ -137,3 +137,6 @@ bot.on('disconnect', function (event) {
 	handleDisconnect();
 });
 // TODO (node:23452) UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id: 11): Error: getaddrinfo ENOENT discordapp.com:443
+
+// TODO (node:13582) UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id: 4156): TypeError: Cannot read property 'options' of undefined
+process.on("unhandledRejection", console.error);
