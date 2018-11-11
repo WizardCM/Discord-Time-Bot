@@ -132,8 +132,8 @@ module.exports.run = function (msg) {
 				break;
 			case 'format':
 				if(hasPerms) {
-					let thisCommand = "!time format";
-					let format = msg.content.replace(thisCommand + ' ', '').replace(thisCommand, '');
+					let thisCommand = "time format";
+					let format = msg.content.replace(thisCommand + ' ', '').substring(1);
 					if (format.length && Object.keys(thisServer).length) {
 						if (format == "default") {
 							thisServer.format = defaultConfig.format;
